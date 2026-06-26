@@ -93,6 +93,15 @@ a{color:inherit;text-decoration:none}
 .rcard .open.soon{background:#EDF0F5;color:var(--subtle);cursor:default;pointer-events:none}
 .rcard .open.soon svg{display:none}
 
+
+/* dual-language comms buttons */
+.rcard .langs{display:flex;gap:8px;margin-top:16px}
+.rcard .langbtn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-weight:800;font-size:clamp(12px,1.2vw,15px);padding:11px 14px;border-radius:11px;
+  background:var(--navy);color:#fff;transition:.25s}
+.rcard .langbtn:hover{background:var(--blue-mid)}
+.rcard .langbtn .flag{font-size:13px;opacity:.85;font-weight:700;letter-spacing:.04em}
+
 /* coming soon placeholder card */
 .rcard.placeholder{border-style:dashed;background:#fff;box-shadow:none}
 .rcard.placeholder:hover{transform:none}
@@ -130,6 +139,7 @@ a{color:inherit;text-decoration:none}
     <a class="qn-link" onclick="jump('getting-started')">Getting started</a>
     <a class="qn-link" onclick="jump('training')">Training</a>
     <a class="qn-link" onclick="jump('quizzes')">Quizzes &amp; resources</a>
+    <a class="qn-link" onclick="jump('comms')">Comms</a>
     <div class="qn-search"><input type="text" id="search" placeholder="Search resources…" oninput="filterCards(this.value)"></div>
   </div>
 </nav>
@@ -276,6 +286,57 @@ a{color:inherit;text-decoration:none}
           <span class="open soon">Coming soon</span>
         </div>
       </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== COMMS & ANNOUNCEMENTS ===================== -->
+  <section class="section" id="comms" data-section>
+    <div class="section-head">
+      <span class="section-dot" style="background:var(--blue-mid)"></span>
+      <h2>Comms &amp; announcements</h2>
+      <span class="count"></span>
+    </div>
+    <div class="cards">
+
+      <div class="rcard" data-card data-title="dh001 welcome email announcement english german willkommen">
+        <div class="stripe" style="background:var(--c-welcome)"></div>
+        <div class="rcard-body">
+          <span class="badge" style="background:var(--c-welcome)">DH001 &middot; Welcome</span>
+          <h3>Welcome email</h3>
+          <p>The opening announcement: meet the team, what your licence unlocks, and what the next few weeks look like.</p>
+          <span class="filetype">Email &middot; EN &amp; DE</span>
+          <div class="langs">
+            <a class="langbtn" href="DH001%20-%20Welcome%20Email%20v2%20EN.html"><span class="flag">EN</span> English</a>
+            <a class="langbtn" href="DH001%20-%20Welcome%20Email%20v2%20DE.html"><span class="flag">DE</span> Deutsch</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="rcard" data-card data-title="dh002 go live email licence is live announcement english german">
+        <div class="stripe" style="background:var(--c-sharing)"></div>
+        <div class="rcard-body">
+          <span class="badge" style="background:var(--c-sharing)">DH002 &middot; Go Live</span>
+          <h3>Go-live email</h3>
+          <p>Your Copilot licence is live: what is different now, your first steps, and where to go next.</p>
+          <span class="filetype">Email &middot; EN &amp; DE</span>
+          <div class="langs">
+            <a class="langbtn" href="DH002%20-%20Go%20Live%20Email%20v2%20EN.html"><span class="flag">EN</span> English</a>
+            <a class="langbtn" href="DH002%20-%20Go%20Live%20Email%20v2%20DE.html"><span class="flag">DE</span> Deutsch</a>
+          </div>
+        </div>
+      </div>
+
+      <a class="rcard" data-card data-title="fs001 anthropic model email feature spotlight new ai models copilot" href="FS001%20-%20Anthropic%20Model%20Email.html">
+        <div class="stripe" style="background:var(--c-tips)"></div>
+        <div class="rcard-body">
+          <span class="badge" style="background:var(--c-tips)">FS001 &middot; Spotlight</span>
+          <h3>New AI models in Copilot</h3>
+          <p>A feature spotlight on the new model choice: what an AI model is, and what the Anthropic Claude option opens up.</p>
+          <span class="filetype">Email &middot; EN</span>
+          <span class="open">Open <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
+        </div>
+      </a>
 
     </div>
   </section>
