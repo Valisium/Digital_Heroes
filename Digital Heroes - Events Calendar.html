@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Heroes — Events Calendar</title>
+<style>
+  :root{
+    --ink:#1A2C5C; --navy:#073763; --blue:#003473; --purple:#511E62;
+    --paper:#F4F6FB; --line:#E4EAF5; --muted:#5C6B8A; --teal:#1FAE97;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Proxima Nova','Segoe UI',Arial,sans-serif;color:var(--ink);
+    background:var(--paper);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1180px;margin:0 auto;padding:40px 32px 56px;}
+
+  .hero{border-radius:20px 20px 0 0;overflow:hidden;color:#fff;
+    background:linear-gradient(120deg,#004687 0%,#073763 52%,#511E62 100%);
+    padding:34px 38px 30px;position:relative;}
+  .hero .eyebrow{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#FEC500;font-weight:800;margin:0 0 8px;}
+  .hero h1{margin:0;font-size:38px;line-height:1.05;font-weight:800;letter-spacing:-.5px;}
+  .hero p{margin:12px 0 0;font-size:16px;line-height:1.5;color:#EAF1FB;max-width:760px;}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+  .meta span{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.28);border-radius:40px;padding:7px 14px;}
+  .meta .gold{background:#FEC500;color:#1A2C5C;border-color:#FEC500;}
+  .spectrum{display:flex;height:6px;margin:0;overflow:hidden;border-radius:0 0 20px 20px;}
+  .spectrum i{flex:1}
+
+  .phases{display:grid;grid-template-columns:1fr 1.9fr;gap:14px;margin:22px 0 8px;}
+  .phase{border-radius:14px;padding:16px 18px;color:#fff;}
+  .phase h3{margin:0 0 3px;font-size:14px;letter-spacing:.4px;text-transform:uppercase;font-weight:800;}
+  .phase span{font-size:13px;opacity:.92;}
+  .p1{background:#511E62;}
+  .p15{background:#1FAE97;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:14px 20px;margin:20px 2px 26px;
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;}
+  .leg{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);}
+  .leg i{width:14px;height:14px;border-radius:4px;display:inline-block;}
+
+  .grid2{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:start;}
+
+  .month{margin:0 0 26px;}
+  .mname{font-size:20px;margin:0 0 12px;color:var(--blue);font-weight:800;}
+  .mname .myear{color:var(--muted);font-weight:600;font-size:15px;}
+  table.cal{width:100%;border-collapse:separate;border-spacing:8px;table-layout:fixed;}
+  .cal th{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+    font-weight:800;padding:0 0 4px;text-align:left;}
+  .cal td.day{background:#fff;border:1px solid var(--line);border-radius:12px;
+    vertical-align:top;height:92px;padding:9px 9px 8px;position:relative;overflow:hidden;}
+  .cal td.empty{background:transparent;border:none;height:0;padding:0;}
+  .cal td.out{background:#EEF1F8;border:1px dashed #DCE3F1;border-radius:12px;height:92px;
+    vertical-align:top;padding:9px;}
+  .cal td.out .dnum{color:#AEB8CE;}
+  .cal td.hl{border:2px solid #7FB53F;box-shadow:0 0 0 3px rgba(127,181,63,.14);}
+  .cal td.star{background:#EAFAF6;border:1px solid #BCEBE1;
+    box-shadow:0 0 0 3px rgba(31,174,151,.10);}
+  .cal td.star::before{content:"";position:absolute;top:0;right:0;
+    border-width:0 30px 30px 0;border-style:solid;
+    border-color:transparent var(--teal) transparent transparent;}
+  .starmark{position:absolute;top:2px;right:3px;color:#fff;font-size:12px;line-height:1;z-index:2;}
+  .dnum{display:block;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:5px;position:relative;}
+  .chip{display:block;font-size:11px;line-height:1.25;font-weight:700;
+    border-radius:6px;padding:4px 7px;margin-top:4px;position:relative;}
+
+  .cadence{position:sticky;top:18px;background:#fff;border:1px solid var(--line);
+    border-radius:16px;padding:20px 20px 6px;}
+  .cadence h3{margin:0 0 4px;font-size:17px;color:var(--blue);font-weight:800;}
+  .cadence .sub{margin:0 0 16px;font-size:13px;color:var(--muted);line-height:1.5;}
+  .cad{display:flex;gap:11px;padding:12px 0;border-top:1px solid var(--line);}
+  .cad:first-of-type{border-top:none;}
+  .cad i{flex:none;width:11px;height:11px;border-radius:50%;margin-top:4px;}
+  .cad b{display:block;font-size:13.5px;color:var(--ink);}
+  .cad span{font-size:12.5px;color:var(--muted);line-height:1.45;}
+
+  .footer{margin-top:30px;font-size:12px;color:var(--muted);text-align:center;}
+</style></head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">Digital Heroes · Microsoft 365 Copilot</p>
+    <h1>Events Calendar</h1>
+    <p>Your at-a-glance guide to the rollout: the key milestones, kick-offs and training workshops, plus the regular weekly rhythm that keeps everyone moving from go-live through embed.</p>
+    <div class="meta">
+      <span class="gold">Go-Live · Mon 29 June 2026</span>
+      <span>UK &amp; Germany</span>
+    </div>
+  </div>
+  <div class="spectrum">
+    <i style="background:#FB9B1B"></i><i style="background:#7FB53F"></i><i style="background:#1FAE97"></i>
+    <i style="background:#2BA6C8"></i><i style="background:#3A77FF"></i><i style="background:#8466D6"></i>
+    <i style="background:#A24FC0"></i><i style="background:#D44F9A"></i>
+  </div>
+
+  <div class="phases">
+    <div class="phase p1"><h3>Phase 1 · Enablement</h3><span>29 Jun – 6 Jul</span></div>
+    <div class="phase p15"><h3>Phase 1.5 · Embed</h3><span>13 Jul – 30 Sep</span></div>
+  </div>
+
+  <div class="legend"><span class="leg"><i style="background:#7FB53F"></i>Milestone / Go-Live</span><span class="leg"><i style="background:#1FAE97"></i>Workshops & Training</span><span class="leg"><i style="background:#8466D6"></i>Kick-off</span><span class="leg"><i style="background:#2BA6C8"></i>Drop-in Clinic</span><span class="leg"><i style="background:#FEC500"></i>Community Prompt (weekly)</span><span class="leg"><i style="background:#D44F9A"></i>Feature Drop (bi-weekly)</span><span class="leg"><i style="background:#FB9B1B"></i>Heroes Digest (monthly)</span><span class="leg"><i style="background:#3A77FF"></i>SLT Update / Reporting</span></div>
+
+  <div class="grid2">
+    <div class="cal-col">
+    <section class="month">
+      <h2 class="mname">June &ndash; July <span class="myear">2026</span></h2>
+      <table class="cal">
+        <thead><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr></thead>
+        <tbody><tr><td class="day hl"><span class="dnum">29</span><span class="chip" style="background:#7FB53F;color:#FFFFFF;">Copilot Go-Live</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">30</span></td><td class="day empty"></td><td class="day empty"></td><td class="day empty"></td></tr><tr><td class="day empty"></td><td class="day empty"></td><td class="day"><span class="dnum">1</span></td><td class="day"><span class="dnum">2</span></td><td class="day"><span class="dnum">3</span></td></tr><tr><td class="day"><span class="dnum">6</span><span class="chip" style="background:#3A77FF;color:#FFFFFF;">SLT data-gov message</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">7</span></td><td class="day"><span class="dnum">8</span></td><td class="day"><span class="dnum">9</span></td><td class="day"><span class="dnum">10</span></td></tr><tr><td class="day"><span class="dnum">13</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">14</span></td><td class="day"><span class="dnum">15</span></td><td class="day"><span class="dnum">16</span><span class="chip" style="background:#D44F9A;color:#FFFFFF;">Feature Drop</span></td><td class="day"><span class="dnum">17</span></td></tr><tr><td class="day"><span class="dnum">20</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">21</span><span class="chip" style="background:#8466D6;color:#FFFFFF;">Kick-off · Option 1</span></td><td class="day"><span class="dnum">22</span></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">23</span><span class="chip" style="background:#8466D6;color:#FFFFFF;">Kick-off · Option 2</span></td><td class="day"><span class="dnum">24</span></td></tr><tr><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">27</span><span class="chip" style="background:#8466D6;color:#FFFFFF;">Kick-off · Option 3</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">28</span></td><td class="day"><span class="dnum">29</span></td><td class="day"><span class="dnum">30</span><span class="chip" style="background:#D44F9A;color:#FFFFFF;">Feature Drop</span></td><td class="day"><span class="dnum">31</span><span class="chip" style="background:#FB9B1B;color:#FFFFFF;">Heroes Digest</span></td></tr></tbody>
+      </table>
+    </section>
+    <section class="month">
+      <h2 class="mname">August <span class="myear">2026</span></h2>
+      <table class="cal">
+        <thead><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr></thead>
+        <tbody><tr><td class="day"><span class="dnum">3</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">4</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 101 · Option 1</span></td><td class="day"><span class="dnum">5</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">6</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 101 · Option 2</span><span class="chip" style="background:#3A77FF;color:#FFFFFF;">SLT Update</span></td><td class="day"><span class="dnum">7</span></td></tr><tr><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">10</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 101 · Option 3</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">11</span></td><td class="day"><span class="dnum">12</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day"><span class="dnum">13</span><span class="chip" style="background:#D44F9A;color:#FFFFFF;">Feature Drop</span></td><td class="day"><span class="dnum">14</span></td></tr><tr><td class="day"><span class="dnum">17</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">18</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 102 · Option 1</span></td><td class="day"><span class="dnum">19</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">20</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 102 · Option 2</span><span class="chip" style="background:#3A77FF;color:#FFFFFF;">SLT Update</span></td><td class="day"><span class="dnum">21</span></td></tr><tr><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">24</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 102 · Option 3</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">25</span></td><td class="day"><span class="dnum">26</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day"><span class="dnum">27</span><span class="chip" style="background:#D44F9A;color:#FFFFFF;">Feature Drop</span></td><td class="day"><span class="dnum">28</span><span class="chip" style="background:#FB9B1B;color:#FFFFFF;">Heroes Digest</span></td></tr><tr><td class="day"><span class="dnum">31</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day empty"></td><td class="day empty"></td><td class="day empty"></td><td class="day empty"></td></tr></tbody>
+      </table>
+    </section>
+    <section class="month">
+      <h2 class="mname">September <span class="myear">2026</span></h2>
+      <table class="cal">
+        <thead><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr></thead>
+        <tbody><tr><td class="day empty"></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">1</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 103 · Option 1</span></td><td class="day"><span class="dnum">2</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">3</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 103 · Option 2</span><span class="chip" style="background:#3A77FF;color:#FFFFFF;">SLT Update</span></td><td class="day"><span class="dnum">4</span></td></tr><tr><td class="day star"><span class="starmark">&#9733;</span><span class="dnum">7</span><span class="chip" style="background:#1FAE97;color:#FFFFFF;">Copilot 103 · Option 3</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">8</span></td><td class="day"><span class="dnum">9</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day"><span class="dnum">10</span><span class="chip" style="background:#D44F9A;color:#FFFFFF;">Feature Drop</span></td><td class="day"><span class="dnum">11</span></td></tr><tr><td class="day"><span class="dnum">14</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">15</span></td><td class="day"><span class="dnum">16</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day"><span class="dnum">17</span><span class="chip" style="background:#3A77FF;color:#FFFFFF;">SLT Update</span></td><td class="day"><span class="dnum">18</span></td></tr><tr><td class="day"><span class="dnum">21</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">22</span></td><td class="day"><span class="dnum">23</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day"><span class="dnum">24</span><span class="chip" style="background:#D44F9A;color:#FFFFFF;">Feature Drop</span></td><td class="day"><span class="dnum">25</span><span class="chip" style="background:#FB9B1B;color:#FFFFFF;">Heroes Digest</span></td></tr><tr><td class="day"><span class="dnum">28</span><span class="chip" style="background:#FEC500;color:#1A2C5C;">Community Prompt</span></td><td class="day"><span class="dnum">29</span></td><td class="day"><span class="dnum">30</span><span class="chip" style="background:#2BA6C8;color:#FFFFFF;">Drop-in Clinic</span></td><td class="day empty"></td><td class="day empty"></td></tr></tbody>
+      </table>
+    </section></div>
+
+    <aside class="cadence">
+      <h3>The weekly rhythm</h3>
+      <p class="sub">Alongside the dated events, this is the regular cadence you can count on each week.</p>
+      <div class="cad"><i style="background:#FEC500"></i><div><b>Community Prompt</b><span>Weekly · every Monday</span></div></div>
+      <div class="cad"><i style="background:#2BA6C8"></i><div><b>Drop-in Clinic</b><span>Weekly from 4 Aug · on days without 100-series training</span></div></div>
+      <div class="cad"><i style="background:#D44F9A"></i><div><b>Feature Drop</b><span>Bi-weekly · Thursdays</span></div></div>
+      <div class="cad"><i style="background:#FB9B1B"></i><div><b>Monthly Heroes Digest</b><span>Monthly · last Friday (from 31 Jul)</span></div></div>
+      <div class="cad"><i style="background:#3A77FF"></i><div><b>SLT Update / Reporting</b><span>Bi-weekly · Thursdays (from 7 Aug)</span></div></div>
+      <div class="cad"><i style="background:#1FAE97"></i><div><b>Workshops &amp; Training <span class="starmark" style="position:static;color:#1FAE97">&#9733;</span></b><span>101 · 102 · 103 — each offered on 3 dates (Tue / Thu / Mon)</span></div></div>
+    </aside>
+  </div>
+
+  <p class="footer">Digital Heroes · Microsoft 365 Copilot enablement programme · Dates may flex; calendar invitations confirm the detail.</p>
+
+</div>
+</body></html>
